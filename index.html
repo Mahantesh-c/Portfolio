@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahantesh Chikkeri | Java Developer</title>
+    <meta name="description" content="Award-winning creative developer specializing in interactive web experiences.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: {
+                            950: '#0a0a0f',
+                            900: '#121218',
+                            800: '#1a1a24',
+                        },
+                        accent: {
+                            primary: '#8b5cf6', // Violet
+                            secondary: '#06b6d4', // Cyan
+                            tertiary: '#ec4899', // Pink
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'shine': 'shine 1.5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shine: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- Base & Utilities --- */
+        body {
+            background-color: #0a0a0f;
+            color: #e2e8f0;
+            /* cursor: none; Removed custom cursor */
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(139, 92, 246, 0.3);
+            color: white;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #a855f7, #6366f1, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- Animations --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 {
+            transition-delay: 100ms;
+        }
+
+        .stagger-2 {
+            transition-delay: 200ms;
+        }
+
+        .stagger-3 {
+            transition-delay: 300ms;
+        }
+
+        .stagger-4 {
+            transition-delay: 400ms;
+        }
+
+        /* Skill Bars Animation */
+        .skill-bar-fill {
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .active .skill-bar-fill {
+            width: var(--w);
+        }
+
+        /* --- Custom Cursor --- */
+        .cursor-dot,
+        .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            /* Ensure cursor is visible on light/dark backgrounds */
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+        }
+
+        .cursor-circle {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        body.hovering .cursor-circle {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: transparent;
+            backdrop-filter: blur(2px);
+        }
+
+        @media (hover: none) {
+
+            .cursor-dot,
+            .cursor-circle {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* --- Blobs & Noise --- */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            opacity: 0.03;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+
+        /* --- Holographic 3D Tilt --- */
+        .tilt-card {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .tilt-card-inner {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .tilt-shadow {
+            position: absolute;
+            inset: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            filter: blur(20px);
+            transform: translateZ(-50px);
+            border-radius: 50%;
+        }
+
+        .holographic-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+            z-index: 30;
+            mix-blend-mode: overlay;
+            opacity: 0.8;
+        }
+
+        .scanlines {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2));
+            background-size: 100% 4px;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 25;
+            opacity: 0.3;
+            border-radius: 50%;
+        }
+
+        .glitch-border {
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, #ff00ea, #00dbde);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(15px);
+            animation: rotate-border 4s linear infinite;
+        }
+
+        @keyframes rotate-border {
+            0% {
+                filter: hue-rotate(0deg) blur(15px);
+            }
+
+            100% {
+                filter: hue-rotate(360deg) blur(15px);
+            }
+        }
+
+        /* --- Interactive Elements --- */
+        .hover-glow {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-glow:not(.nav-link):hover {
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4), 0 8px 10px -6px rgba(168, 85, 247, 0.3);
+        }
+
+        /* --- Navigation Underline --- */
+        .nav-underline {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            border-radius: 99px;
+            z-index: 10;
+        }
+
+        /* --- Radial Progress --- */
+        .radial-progress {
+            position: relative;
+            display: inline-grid;
+            place-items: center;
+        }
+
+        .radial-progress-svg {
+            transform: rotate(-90deg);
+        }
+
+        .radial-progress-circle {
+            fill: none;
+            stroke-dasharray: 251.2;
+            /* 2 * PI * 40 */
+            stroke-dashoffset: 251.2;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .active .radial-progress-circle {
+            stroke-dashoffset: var(--offset);
+        }
+
+        /* --- Typewriter Removed --- */
+    </style>
+</head>
+
+<body class="antialiased font-sans bg-dark-950 text-gray-200">
+
+    <!-- Screen Overlays -->
+    <div class="noise"></div>
+    <!-- Custom Cursor Removed -->
+
+    <!-- Scroll Progress -->
+    <div class="fixed top-0 left-0 w-full h-1 z-50 bg-white/5">
+        <div id="scroll-progress"
+            class="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-500 w-0 transition-all duration-100 ease-out">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 top-0 transition-all duration-300 py-6" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold font-display tracking-tighter hover-lift" data-cursor="hover">
+                MC<span class="text-indigo-500">.</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-2 relative" id="desktop-menu">
+                <a href="#about"
+                    class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 nav-link"
+                    data-cursor="hover">About</a>
+                <a href="#skills"
+                    class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 nav-link"
+                    data-cursor="hover">Skills</a>
+                <a href="#education"
+                    class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 nav-link"
+                    data-cursor="hover">Education</a>
+                <a href="#work"
+                    class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 nav-link"
+                    data-cursor="hover">Projects</a>
+                <a href="#certificates"
+                    class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-all duration-300 nav-link"
+                    data-cursor="hover">Certificates</a>
+                <a href="#contact"
+                    class="ml-2 px-5 py-2 rounded-full border border-indigo-500/30 text-indigo-400 text-sm font-medium hover:text-white hover:border-indigo-500 transition-all"
+                    data-cursor="hover">Let's Talk</a>
+                <div class="nav-underline" id="nav-underline"></div>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="md:hidden text-white hover-lift focus:outline-none" id="menu-btn" data-cursor="hover">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-dark-950/95 backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8">
+        <button id="close-menu" class="absolute top-6 right-6 text-2xl text-gray-400"><i
+                class="fas fa-times"></i></button>
+        <a href="#about"
+            class="text-3xl font-display font-bold hover:text-indigo-400 transition-colors mobile-link">About</a>
+        <a href="#skills"
+            class="text-3xl font-display font-bold hover:text-indigo-400 transition-colors mobile-link">Skills</a>
+        <a href="#education"
+            class="text-3xl font-display font-bold hover:text-indigo-400 transition-colors mobile-link">Education</a>
+        <a href="#work"
+            class="text-3xl font-display font-bold hover:text-indigo-400 transition-colors mobile-link">Work</a>
+        <a href="#certificates"
+            class="text-3xl font-display font-bold hover:text-indigo-400 transition-colors mobile-link">Certificates</a>
+        <a href="#contact" class="text-3xl font-display font-bold text-indigo-500 mobile-link">Let's Talk</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
+        <!-- Blobs -->
+        <div class="blob w-96 h-96 bg-purple-600/20 rounded-full top-0 left-0 mix-blend-screen animate-pulse-slow">
+        </div>
+        <div class="blob w-96 h-96 bg-cyan-600/20 rounded-full bottom-0 right-0 mix-blend-screen animate-pulse-slow"
+            style="animation-delay: -5s"></div>
+
+        <div class="max-w-7xl mx-auto px-6 z-10 relative">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="text-center md:text-left">
+                    <div
+                        class="inline-block mb-4 px-4 py-1.5 rounded-full glass text-xs font-medium text-cyan-400 reveal uppercase tracking-[0.2em] border border-cyan-500/20">
+                        Java Developer
+                    </div>
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-tight mb-6 reveal stagger-1 tracking-tight">
+                        Mahantesh <span class="text-gradient">Chikkeri</span>
+                    </h1>
+                    <p class="text-lg text-gray-400 mb-10 reveal stagger-2 font-light leading-relaxed">
+                        Passionate Java Developer | Focused on <span class="text-white font-medium">Learning, Building,
+                            and Growing</span>.
+                    </p>
+
+                    <!-- Floating Social Icons -->
+                    <div class="flex justify-center md:justify-start gap-6 mb-16 reveal stagger-3">
+                        <a href="https://github.com/Mahantesh-c"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover"><i class="fab fa-github text-xl"></i></a>
+                        <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover"><i class="fab fa-linkedin-in text-xl"></i></a>
+                        <a href="https://maps.app.goo.gl/KFhqjRhNvA6ewh5Y6"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover" title="Gadag, Karnataka"><i
+                                class="fas fa-map-marker-alt text-xl"></i></a>
+                        <a href="mailto:mahanteshchikkeri05@gmail.com"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover"><i class="fas fa-envelope text-xl"></i></a>
+                    </div>
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="flex justify-center reveal stagger-2 relative perspective-container">
+                    <!-- Tilt Card Container -->
+                    <div class="tilt-card w-64 h-64 md:w-80 md:h-80 cursor-pointer">
+                        <div class="tilt-card-inner relative w-full h-full">
+
+                            <!-- 3D Shadow -->
+                            <div class="tilt-shadow"></div>
+
+                            <!-- Animated Glow Background -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-cyan-500 rounded-full blur-[40px] opacity-40 animate-pulse-slow">
+                            </div>
+
+                            <!-- Glitch Border -->
+                            <div class="glitch-border"></div>
+
+                            <!-- Rotating Rings -->
+                            <div class="absolute -inset-4 border border-white/10 rounded-full animate-spin-slow pointer-events-none border-dashed"
+                                style="transform: translateZ(20px);"></div>
+                            <div class="absolute -inset-8 border border-white/5 rounded-full animate-spin-slow pointer-events-none"
+                                style="animation-direction: reverse; animation-duration: 15s; transform: translateZ(10px);">
+                            </div>
+
+                            <!-- Floating Icons (3D Depth) -->
+                            <div class="absolute -top-4 -right-4 w-10 h-10 glass rounded-full flex items-center justify-center animate-bounce delay-100 z-30 shadow-lg shadow-cyan-500/20"
+                                style="transform: translateZ(50px);">
+                                <i class="fas fa-code text-cyan-400 text-sm"></i>
+                            </div>
+                            <div class="absolute bottom-8 -left-8 w-12 h-12 glass rounded-full flex items-center justify-center animate-float delay-300 z-30 shadow-lg shadow-indigo-500/20"
+                                style="transform: translateZ(40px);">
+                                <i class="fas fa-terminal text-indigo-400"></i>
+                            </div>
+                            <div class="absolute -bottom-2 right-0 w-8 h-8 glass rounded-full flex items-center justify-center animate-bounce delay-500 z-30 shadow-lg shadow-purple-500/20"
+                                style="transform: translateZ(30px);">
+                                <i class="fas fa-bolt text-purple-400 text-xs"></i>
+                            </div>
+
+                            <!-- Main Image Container -->
+                            <div class="relative w-full h-full rounded-full glass overflow-hidden border-4 border-white/5 z-20"
+                                style="transform: translateZ(0px);">
+                                <!-- Holographic Overlays -->
+                                <div class="scanlines"></div>
+                                <div class="holographic-overlay"></div>
+
+                                <!-- Image -->
+                                <!-- 
+                                    ==========================================
+                                    [!] REPLACE THE IMAGE BELOW WITH YOUR OWN
+                                    ==========================================
+                                -->
+                                <img src="./IMG_20250725_165150.jpg" alt="Mahantesh Chikkeri"
+                                    class="w-full h-full object-cover"
+                                    data-instruction="Replace src with your image URL">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 reveal stagger-4">
+                <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 relative bg-dark-900/30">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-3 reveal">About Me</h2>
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1">Behind the <span
+                    class="text-gradient">Code</span></h3>
+
+            <div class="grid md:grid-cols-2 gap-16 items-start">
+                <div class="space-y-6 text-lg text-gray-400 leading-relaxed reveal stagger-2">
+                    <p>
+                        Motivated and detail-oriented Computer Science graduate seeking an entry-level Java Developer
+                        position where I can apply my knowledge of Core Java, Object-Oriented Programming, and
+                        problem-solving skills to develop efficient and reliable applications. I am eager to learn new
+                        technologies, work on real-world projects, and contribute to the growth of the organization
+                        while continuously improving my technical and professional skills.
+                    </p>
+                </div>
+
+                <!-- Technical Attributes Grid -->
+                <div class="grid grid-cols-2 gap-4 reveal stagger-3">
+                    <div
+                        class="glass p-6 rounded-2xl transition-all hover:-translate-y-1 duration-300 group hover-glow border border-white/5 hover:border-purple-500/30">
+                        <i
+                            class="fas fa-brain text-2xl text-purple-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-white mb-1">Problem Solver</h4>
+                        <p class="text-xs text-gray-500">Thinking outside the box.</p>
+                    </div>
+                    <div
+                        class="glass p-6 rounded-2xl transition-all hover:-translate-y-1 duration-300 group hover-glow border border-white/5 hover:border-orange-500/30">
+                        <i
+                            class="fab fa-java text-2xl text-orange-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-white mb-1">Java Developer</h4>
+                        <p class="text-xs text-gray-500">Core Java & OOP Logic.</p>
+                    </div>
+                    <div
+                        class="glass p-6 rounded-2xl transition-all hover:-translate-y-1 duration-300 group hover-glow border border-white/5 hover:border-cyan-500/30">
+                        <i
+                            class="fas fa-code text-2xl text-cyan-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-white mb-1">Clean Code</h4>
+                        <p class="text-xs text-gray-500">Readable & Efficient.</p>
+                    </div>
+                    <div
+                        class="glass p-6 rounded-2xl transition-all hover:-translate-y-1 duration-300 group hover-glow border border-white/5 hover:border-pink-500/30">
+                        <i
+                            class="fas fa-layer-group text-2xl text-pink-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-white mb-1">Tech Enthusiast</h4>
+                        <p class="text-xs text-gray-500">Always learning new tech.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-32 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-cyan-500 mb-3 reveal"></h2>
+            <h3 class="text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1">Technical <span
+                    class="text-gradient">Skills</span></h3>
+
+            <!-- Tech Stack Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal stagger-2">
+                <!-- Skill 1 -->
+                <div
+                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
+                    <div
+                        class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-java text-3xl text-purple-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Java Core</h4>
+                    <p class="text-xs text-gray-400">OOPs,Collections, Exception Handling, Multithreading, JDBC.</p>
+                </div>
+
+                <!-- Skill 2 -->
+                <div
+                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-green-500/30 hover-glow">
+                    <div
+                        class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-leaf text-3xl text-green-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Spring Boot</h4>
+                    <p class="text-xs text-gray-400">REST APIs, Security, & Microservices.</p>
+                </div>
+
+                <!-- Skill 3 -->
+                <div
+                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
+                    <div
+                        class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-database text-3xl text-blue-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">SQL / NoSQL</h4>
+                    <p class="text-xs text-gray-400">MySQL, PostgreSQL & MongoDB Optimization.</p>
+                </div>
+
+                <!-- Skill 4 -->
+                <div
+                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-cyan-500/30 hover-glow">
+                    <div
+                        class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-react text-3xl text-cyan-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Frontend</h4>
+                    <p class="text-xs text-gray-400">React, JavaScript (ES6+) & Tailwind CSS.</p>
+                </div>
+
+                <!-- Skill 5 -->
+                <div
+                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
+                    <div
+                        class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-git-alt text-3xl text-orange-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Git & DevOps</h4>
+                    <p class="text-xs text-gray-400">Version Control, CI/CD Pipelines & GitHub.</p>
+                </div>
+
+                <!-- Skill 6 -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-teal-500/30">
+                    <div
+                        class="w-12 h-12 bg-teal-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-server text-3xl text-teal-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Java Servlets</h4>
+                    <p class="text-xs text-gray-400">Request/Response Lifecycle & Session Management.</p>
+                </div>
+
+                <!-- Skill 7 -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-indigo-500/30">
+                    <div
+                        class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-network-wired text-3xl text-indigo-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Microservices</h4>
+                    <p class="text-xs text-gray-400">Distributed Architecture & API Gateway.</p>
+                </div>
+
+                <!-- Skill 8 -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-amber-500/30">
+                    <div
+                        class="w-12 h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-project-diagram text-3xl text-amber-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Hibernate</h4>
+                    <p class="text-xs text-gray-400">ORM, JPA Implementation & Entity Mapping.</p>
+                </div>
+
+                <!-- Skill 9: HTML -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30">
+                    <div
+                        class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-html5 text-3xl text-orange-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">HTML5</h4>
+                    <p class="text-xs text-gray-400">Semantic Markup, Accessibility & SEO.</p>
+                </div>
+
+                <!-- Skill 10: CSS -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30">
+                    <div
+                        class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-css3-alt text-3xl text-blue-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">CSS3</h4>
+                    <p class="text-xs text-gray-400">Flexbox, Grid, Animations & Responsive Design.</p>
+                </div>
+
+                <!-- Skill 11: JavaScript -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-yellow-500/30">
+                    <div
+                        class="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-js text-3xl text-yellow-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">JavaScript</h4>
+                    <p class="text-xs text-gray-400">ES6+, DOM Manipulation, Async/Await & APIs.</p>
+                </div>
+
+                <!-- Skill 12: Eclipse IDE -->
+                <div
+                    class="glass p-6 rounded-2xl hover:bg-white/5 transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30">
+                    <div
+                        class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-code text-3xl text-purple-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Eclipse IDE</h4>
+                    <p class="text-xs text-gray-400">Development, Debugging & Maven Integration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-32 relative bg-dark-900/30">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-purple-500 mb-3 reveal">Journey</h2>
+            <h3 class="text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1"><span
+                    class="text-gradient">Education</span></h3>
+
+            <div class="relative border-l border-gray-800 ml-3 md:ml-0 md:pl-0 space-y-12">
+                <!-- Timeline Item 1 -->
+                <div class="relative pl-8 md:pl-0 group reveal stagger-2">
+                    <!-- Dot -->
+                    <div
+                        class="absolute -left-[5px] top-2 w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.6)] group-hover:scale-150 transition-transform duration-300 z-10">
+                    </div>
+
+                    <div class="md:grid md:grid-cols-[150px_1fr] gap-8 items-start">
+                        <span
+                            class="text-xs font-mono text-indigo-400 py-1 hidden md:block opacity-60 group-hover:opacity-100 transition-opacity">2025
+                            - Present</span>
+                        <div
+                            class="glass p-8 rounded-2xl hover:bg-white/5 transition-all group-hover:-translate-y-1 duration-300 relative overflow-hidden group-hover:border-indigo-500/30">
+                            <span class="md:hidden text-xs font-mono text-indigo-400 mb-2 block">2025 - Present</span>
+                            <div
+                                class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-[40px] -mr-10 -mt-10 pointer-events-none">
+                            </div>
+
+                            <h4 class="text-xl font-bold text-white mb-1">BCA Computer Application</h4>
+                            <h5 class="text-sm text-gray-400 mb-4 font-medium">KLE’S JT COLLEGE GADAG</h5>
+                            <p class="text-sm text-gray-400 leading-relaxed mb-2">
+                                CGPA: <span class="text-white font-bold">8.24</span>
+                            </p>
+                            <p class="text-xs text-gray-500 flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt"></i> Gadag, India
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="relative pl-8 md:pl-0 group reveal stagger-3">
+                    <div
+                        class="absolute -left-[5px] top-2 w-3 h-3 rounded-full bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] group-hover:scale-150 transition-transform duration-300 z-10">
+                    </div>
+
+                    <div class="md:grid md:grid-cols-[150px_1fr] gap-8 items-start">
+                        <span
+                            class="text-xs font-mono text-cyan-400 py-1 hidden md:block opacity-60 group-hover:opacity-100 transition-opacity">2020
+                            - 2022</span>
+                        <div
+                            class="glass p-8 rounded-2xl hover:bg-white/5 transition-all group-hover:-translate-y-1 duration-300 relative overflow-hidden group-hover:border-cyan-500/30">
+                            <span class="md:hidden text-xs font-mono text-cyan-400 mb-2 block">2020 - 2022</span>
+                            <div
+                                class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/10 rounded-full blur-[40px] -mr-10 -mt-10 pointer-events-none">
+                            </div>
+
+                            <h4 class="text-xl font-bold text-white mb-1">Pre-University (PUC)</h4>
+                            <h5 class="text-sm text-gray-400 mb-4 font-medium">KLE PU College, Gangavathi</h5>
+                            <p class="text-sm text-gray-400 leading-relaxed mb-2">
+                                Percentage: <span class="text-white font-bold">86.56%</span>
+                            </p>
+                            <p class="text-xs text-gray-500 flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt"></i> Gangavathi, India
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="relative pl-8 md:pl-0 group reveal stagger-4">
+                    <div
+                        class="absolute -left-[5px] top-2 w-3 h-3 rounded-full bg-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.6)] group-hover:scale-150 transition-transform duration-300 z-10">
+                    </div>
+
+                    <div class="md:grid md:grid-cols-[150px_1fr] gap-8 items-start">
+                        <span
+                            class="text-xs font-mono text-pink-400 py-1 hidden md:block opacity-60 group-hover:opacity-100 transition-opacity">2020</span>
+                        <div
+                            class="glass p-8 rounded-2xl hover:bg-white/5 transition-all group-hover:-translate-y-1 duration-300 relative overflow-hidden group-hover:border-pink-500/30">
+                            <span class="md:hidden text-xs font-mono text-pink-400 mb-2 block">2020</span>
+                            <div
+                                class="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-full blur-[40px] -mr-10 -mt-10 pointer-events-none">
+                            </div>
+
+                            <h4 class="text-xl font-bold text-white mb-1">SSLC</h4>
+                            <h5 class="text-sm text-gray-400 mb-4 font-medium">Janata Seva English Medium High School
+                            </h5>
+                            <p class="text-sm text-gray-400 leading-relaxed mb-2">
+                                Percentage: <span class="text-white font-bold">66.56%</span>
+                            </p>
+                            <p class="text-xs text-gray-500 flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt"></i> Gangavathi, India
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="work" class="py-16 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-3 reveal"></h2>
+            <h3 class="text-4xl md:text-5xl font-display font-bold mb-10 reveal stagger-1">Final Year <span
+                    class="text-gradient">Project</span></h3>
+
+            <!-- Final Year Project -->
+            <div class="max-w-6xl mx-auto">
+                <article
+                    class="group glass rounded-3xl overflow-hidden hover:border-indigo-500/40 transition-all duration-500 hover:-translate-y-2 reveal stagger-2"
+                    data-cursor="hover">
+                    <div class="grid md:grid-cols-2 gap-0">
+                        <!-- Project Image -->
+                        <div class="h-64 md:h-auto bg-gray-800 relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-indigo-900 to-purple-900 group-hover:scale-105 transition-transform duration-700 ease-out">
+                            </div>
+                            <!-- Placeholder Icon/Image -->
+                            <div
+                                class="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-10 transition-opacity duration-500">
+                                <i class="fas fa-wave-square text-8xl"></i>
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold border border-white/10 uppercase tracking-wide">
+                                Final Year Project</div>
+
+                            <img src="./Pro-img_processed.jpg"
+                                class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay group-hover:opacity-40 transition-opacity"
+                                alt="Speech Emotion Recognition Project">
+                        </div>
+
+                        <!-- Project Content -->
+                        <div class="p-6 md:p-10 flex flex-col justify-center">
+                            <h4
+                                class="text-3xl font-display font-bold text-white mb-4 group-hover:text-indigo-400 transition-colors">
+                                Speech Emotion Recognition</h4>
+
+                            <!-- Project Context -->
+                            <div class="mb-6 p-4 rounded-xl bg-white/5 border border-white/5">
+                                <h5 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">Project
+                                    Context</h5>
+                                <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                                    Traditional systems process speech content but ignore emotional tone. This project
+                                    bridges that gap by building an AI-powered system that analyzes voice signals to
+                                    understand the "how" behind the "what."
+                                </p>
+                                <ul class="text-xs text-gray-400 grid grid-cols-2 gap-2">
+                                    <li class="flex items-center gap-2"><i
+                                            class="fas fa-check-circle text-indigo-500"></i> Record/Upload Audio</li>
+                                    <li class="flex items-center gap-2"><i
+                                            class="fas fa-check-circle text-indigo-500"></i> MFCC Feature Extraction
+                                    </li>
+                                    <li class="flex items-center gap-2"><i
+                                            class="fas fa-check-circle text-indigo-500"></i> SVM/CNN Prediction</li>
+                                    <li class="flex items-center gap-2"><i
+                                            class="fas fa-check-circle text-indigo-500"></i> Real-time Feedback</li>
+                                </ul>
+                            </div>
+
+                            <!-- Key Highlights -->
+                            <div class="mb-6">
+                                <h5 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-4">Key
+                                    Highlights</h5>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-3 group/item">
+                                        <div
+                                            class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 group-hover/item:scale-150 transition-transform">
+                                        </div>
+                                        <p
+                                            class="text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors">
+                                            Extracted audio features (MFCC) using <span
+                                                class="text-indigo-300">Python</span> and <span
+                                                class="text-indigo-300">Librosa</span> for high-quality signal
+                                            processing.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 group/item">
+                                        <div
+                                            class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 group-hover/item:scale-150 transition-transform">
+                                        </div>
+                                        <p
+                                            class="text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors">
+                                            Developed and trained <span class="text-indigo-300">SVM & CNN</span> models
+                                            achieving an impressive <span class="text-white font-bold">88–90%
+                                                accuracy</span>.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 group/item">
+                                        <div
+                                            class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 group-hover/item:scale-150 transition-transform">
+                                        </div>
+                                        <p
+                                            class="text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors">
+                                            Seamlessly integrated AI models into a <span class="text-indigo-300">Django
+                                                backend</span> for real-time inference and management.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 group/item">
+                                        <div
+                                            class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 group-hover/item:scale-150 transition-transform">
+                                        </div>
+                                        <p
+                                            class="text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors">
+                                            Implemented a dynamic UI with <span class="text-indigo-300">Audio
+                                                Recording</span> and instant emotional feedback via emojis.</p>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Impact Section -->
+                            <div class="mb-6">
+                                <h5 class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3">Impact
+                                </h5>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div
+                                        class="flex items-start gap-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+                                        <i class="fas fa-user-md text-emerald-400 mt-1"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-white">Mental Health Monitoring</p>
+                                            <p class="text-[10px] text-gray-500">Identifying emotional distress
+                                                patterns.</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-start gap-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+                                        <i class="fas fa-headset text-emerald-400 mt-1"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-white">Call-Center Analytics</p>
+                                            <p class="text-[10px] text-gray-500">Understanding customer satisfaction via
+                                                tone.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span
+                                    class="px-3 py-1 text-xs font-medium rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300">Python</span>
+                                <span
+                                    class="px-3 py-1 text-xs font-medium rounded-full bg-green-500/10 border border-green-500/20 text-green-300">Django</span>
+                                <span
+                                    class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-300">JavaScript</span>
+                                <span
+                                    class="px-3 py-1 text-xs font-medium rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-300">Librosa</span>
+                                <span
+                                    class="px-3 py-1 text-xs font-medium rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300">SVM/CNN</span>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <a href="https://github.com/Mahantesh-c/Speech_Emotion"
+                                    class="w-full sm:w-auto px-8 py-3 rounded-xl bg-indigo-600 text-white font-bold text-center hover:bg-indigo-700 transition-colors hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/25 hover-glow">
+                                    View Project</a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    <!-- Certificates Section -->
+    <section id="certificates" class="py-32 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-purple-500 mb-3 reveal">Credentials</h2>
+            <h3 class="text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1">Professional <span
+                    class="text-gradient">Certifications</span></h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal stagger-2">
+                <!-- Certificate 1 -->
+                <div class="group glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover-glow"
+                    data-cursor="hover">
+                    <div class="flex items-start justify-between mb-6">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                            <i class="fas fa-certificate text-3xl text-purple-400"></i>
+                        </div>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">2026</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Java Full Stack Training</h4>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Completed intensive training at **Qspiders
+                        Basavagudi**, mastering Core Java, JDBC, Spring Boot, Hibernate, and Data Structures And
+                        Algorithms.</p>
+                    <a href="#"
+                        class="inline-flex items-center gap-2 text-sm font-bold text-purple-400 hover:text-white transition-colors">
+                        Verify Credential <i class="fas fa-external-link-alt text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Certificate 2 -->
+                <div class="group glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover-glow"
+                    data-cursor="hover">
+                    <div class="flex items-start justify-between mb-6">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                            <i class="fas fa-code text-3xl text-cyan-400"></i>
+                        </div>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">2024</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Web Development (MERN Stack)</h4>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Conducted by **KLE JT COLLEGE GADAG**,
+                        focusing on building full-stack applications using **React.js, Node.js, and MongoDB**.</p>
+                    <a href="#"
+                        class="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-white transition-colors">
+                        Verify Credential <i class="fas fa-external-link-alt text-xs"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Languages Section -->
+    <section id="languages" class="py-24 relative bg-dark-900/30 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-cyan-500 mb-3 reveal">Communication</h2>
+            <h3 class="text-4xl md:text-5xl font-display font-bold mb-20 reveal stagger-1">Languages <span
+                    class="text-gradient">Known</span></h3>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
+                <!-- English -->
+                <div class="flex flex-col items-center reveal stagger-2 group" data-cursor="hover">
+                    <div
+                        class="radial-progress w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg class="radial-progress-svg w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" class="stroke-white/5" stroke-width="6" fill="none" />
+                            <circle cx="50" cy="50" r="40" class="radial-progress-circle stroke-indigo-500"
+                                stroke-width="6" stroke-linecap="round" style="--offset: 25.12;" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <i class="fas fa-globe-americas text-3xl text-indigo-400 mb-1"></i>
+                            <span class="text-sm font-bold text-white">90%</span>
+                        </div>
+                        <div
+                            class="absolute inset-2 bg-indigo-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-1">English</h4>
+                    <p class="text-xs text-indigo-400 font-bold uppercase tracking-widest">Fluent</p>
+                </div>
+
+                <!-- Kannada -->
+                <div class="flex flex-col items-center reveal stagger-3 group" data-cursor="hover">
+                    <div
+                        class="radial-progress w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg class="radial-progress-svg w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" class="stroke-white/5" stroke-width="6" fill="none" />
+                            <circle cx="50" cy="50" r="40" class="radial-progress-circle stroke-emerald-500"
+                                stroke-width="6" stroke-linecap="round" style="--offset: 0;" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-4xl font-bold text-emerald-400 mb-1"></span>
+                            <span class="text-sm font-bold text-white">100%</span>
+                        </div>
+                        <div
+                            class="absolute inset-2 bg-emerald-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-1">Kannada</h4>
+                    <p class="text-xs text-emerald-400 font-bold uppercase tracking-widest">Native</p>
+                </div>
+
+                <!-- Hindi -->
+                <div class="flex flex-col items-center reveal stagger-4 group" data-cursor="hover">
+                    <div
+                        class="radial-progress w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg class="radial-progress-svg w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" class="stroke-white/5" stroke-width="6" fill="none" />
+                            <circle cx="50" cy="50" r="40" class="radial-progress-circle stroke-amber-500"
+                                stroke-width="6" stroke-linecap="round" style="--offset: 37.68;" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-4xl font-bold text-amber-400 mb-1"></span>
+                            <span class="text-sm font-bold text-white">75%</span>
+                        </div>
+                        <div
+                            class="absolute inset-2 bg-amber-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-1">Hindi</h4>
+                    <p class="text-xs text-amber-400 font-bold uppercase tracking-widest">Moderate</p>
+                </div>
+
+                <!-- Telugu -->
+                <div class="flex flex-col items-center reveal stagger-5 group" data-cursor="hover">
+                    <div
+                        class="radial-progress w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg class="radial-progress-svg w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" class="stroke-white/5" stroke-width="6" fill="none" />
+                            <circle cx="50" cy="50" r="40" class="radial-progress-circle stroke-purple-500"
+                                stroke-width="6" stroke-linecap="round" style="--offset: 50.24;" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-4xl font-bold text-purple-400 mb-1"></span>
+                            <span class="text-sm font-bold text-white">65%</span>
+                        </div>
+                        <div
+                            class="absolute inset-2 bg-purple-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-1">Telugu</h4>
+                    <p class="text-xs text-purple-400 font-bold uppercase tracking-widest">Moderate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Footer -->
+    <footer id="contact" class="pt-32 pb-12 relative overflow-hidden text-center">
+        <!-- Glow Bg -->
+        <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-indigo-600/10 blur-[120px] pointer-events-none mb-[-50px]">
+        </div>
+
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <h2 class="text-4xl sm:text-5xl md:text-7xl font-display font-bold mb-8 reveal">
+                Let's <span class="text-gradient">Connect!</span>
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-400 mb-12 reveal stagger-1 leading-relaxed max-w-2xl mx-auto">
+                Have an exciting project in mind? Or just want to say hi? I'm always open to new opportunities and
+                interesting conversations.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-24 reveal stagger-2">
+                <a href="mailto:[mahanteshchikkeri05@gmail.com]"
+                    class="w-full sm:w-auto group px-8 py-4 rounded-full bg-indigo-600 text-white font-bold text-lg hover:bg-indigo-700 transition-all hover:-translate-y-1 shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-3 hover-glow"
+                    data-cursor="hover">
+                    <i class="fas fa-envelope"></i> mahantesh@gmail.com
+                </a>
+                <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
+                    class="w-full sm:w-auto group px-8 py-4 rounded-full glass text-white font-bold text-lg hover:bg-white/10 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 hover-glow"
+                    data-cursor="hover">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+
+            <!-- Download Resume CTA -->
+            <div class="mb-24 reveal stagger-3">
+                <!-- 
+                    [!] RESUME FILE REQUIRED
+                    Place your PDF file in the root folder and name it "resume.pdf"
+                    Or update the href below to point to your file.
+                -->
+                <a href="./Java_Resume (2).pdf" target="_blank"
+                    class="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/10 text-sm font-bold text-gray-300 hover:text-white hover:border-white/30 transition-all hover:scale-105 bg-white/5 backdrop-blur-sm"
+                    data-cursor="hover">
+                    <i class="fas fa-file-arrow-down text-cyan-400"></i> Download Resume
+                </a>
+            </div>
+            </a>
+        </div>
+
+        <div class="border-t border-white/5 pt-12 text-center text-sm text-gray-500 reveal stagger-4">
+            <p class="mb-4">&copy;2026 Mahantesh Chikkeri | Designed and Built with passion &#10084; precision.</p>
+            <div class="flex justify-center gap-6">
+                <a href="https://github.com/Mahantesh-c" class="hover:text-indigo-400 transition-colors hover-glow"
+                    data-cursor="hover">GitHub</a>
+                <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
+                    class="hover:text-cyan-400 transition-colors hover-glow" data-cursor="hover">LinkedIn</a>
+            </div>
+        </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#home" id="back-to-top"
+        class="fixed bottom-8 right-8 p-4 border border-white/10 rounded-full text-white translate-y-24 opacity-0 transition-all duration-500 hover:text-cyan-400 hover:border-cyan-500/50 z-40 hover:-translate-y-1 hover-glow"
+        aria-label="Back to Top" data-cursor="hover">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements - Restored
+            const menuBtn = document.getElementById('menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            const navbar = document.getElementById('navbar');
+            const observerElements = document.querySelectorAll('.reveal');
+            const scrollProgress = document.getElementById('scroll-progress');
+            const backToTop = document.getElementById('back-to-top');
+
+            // --- 3D Tilt Effect ---
+            const card = document.querySelector('.tilt-card');
+            const inner = document.querySelector('.tilt-card-inner');
+
+            if (card && inner) {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // Calculate center
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    // Calculate rotation (max 15 deg)
+                    const rotateX = ((y - centerY) / centerY) * -15;
+                    const rotateY = ((x - centerX) / centerX) * 15;
+
+                    inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    inner.style.transform = `rotateX(0) rotateY(0) scale(1)`;
+                });
+            }
+
+            // --- Typewriter Effect Removed ---
+
+            // --- Mobile Menu ---
+            const toggleMenu = () => {
+                mobileMenu.classList.toggle('translate-x-full');
+                document.body.classList.toggle('overflow-hidden');
+            };
+            menuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // --- Nav Underline Logic ---
+            const navUnderline = document.getElementById('nav-underline');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const desktopMenu = document.getElementById('desktop-menu');
+
+            const moveUnderline = (element) => {
+                if (!element) return;
+                const rect = element.getBoundingClientRect();
+                const menuRect = desktopMenu.getBoundingClientRect();
+                navUnderline.style.width = `${rect.width}px`;
+                navUnderline.style.left = `${rect.left - menuRect.left}px`;
+                navUnderline.style.opacity = '1';
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', () => moveUnderline(link));
+            });
+
+            desktopMenu.addEventListener('mouseleave', () => {
+                // Find active section or hide
+                const activeLink = Array.from(navLinks).find(l => l.classList.contains('text-white'));
+                if (activeLink) {
+                    moveUnderline(activeLink);
+                } else {
+                    navUnderline.style.opacity = '0';
+                    navUnderline.style.width = '0';
+                }
+            });
+
+            // Initialize position
+            setTimeout(() => {
+                const homeLink = navLinks[0]; // Default to first or check active
+                // For now, hide until hover to be minimalist
+                navUnderline.style.opacity = '0';
+                navUnderline.style.width = '0';
+            }, 500);
+
+            // --- Scroll Logic ---
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                // Progress Bar
+                const scrollPercent = (scrollY / docHeight) * 100;
+                scrollProgress.style.width = scrollPercent + '%';
+
+                // Navbar Glass & Size
+                if (scrollY > 50) {
+                    navbar.classList.add('glass', 'border-b', 'border-white/5');
+                    navbar.classList.remove('py-6');
+                    navbar.classList.add('py-4');
+                } else {
+                    navbar.classList.remove('glass', 'border-b', 'border-white/5');
+                    navbar.classList.remove('py-4');
+                    navbar.classList.add('py-6');
+                }
+
+                // Back to Top
+                if (scrollY > 500) {
+                    backToTop.classList.remove('translate-y-24', 'opacity-0');
+                } else {
+                    backToTop.classList.add('translate-y-24', 'opacity-0'); // added opacity-0 back
+                }
+            });
+
+            // --- Intersection Observer (Animations) ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: Unobserve if you only want it to happen once
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            observerElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+
+</html>
