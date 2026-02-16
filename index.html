@@ -493,12 +493,10 @@
                                     [!] REPLACE THE IMAGE BELOW WITH YOUR OWN
                                     ==========================================
                                 -->
-<<<<<<< HEAD
-                                <img src="./img.jpeg" alt="Mahantesh Chikkeri" class="w-full h-full object-cover"
-=======
-                                <img src="./img.jpeg" alt="Mahantesh Chikkeri"
-                                    class="w-full h-full object-cover"
->>>>>>> c2b69cf1e4e9ce8c78a0d8d926582eb1def167c5
+                                <<<<<<< HEAD <img src="./img.jpeg" alt="Mahantesh Chikkeri"
+                                    class="w-full h-full object-cover"=======<img src="./img.jpeg"
+                                    alt="Mahantesh Chikkeri" class="w-full h-full object-cover">>>>>>>
+                                    c2b69cf1e4e9ce8c78a0d8d926582eb1def167c5
                                     data-instruction="Replace src with your image URL">
                             </div>
                         </div>
@@ -573,140 +571,176 @@
             <h3 class="text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1">Technical <span
                     class="text-gradient">Skills</span></h3>
 
-            <!-- Tech Stack Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal stagger-2">
-                <!-- Skill 1 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-java text-3xl text-purple-400"></i>
+            <!-- Categorized Tech Stack -->
+            <div class="space-y-16 reveal stagger-2">
+
+                <!-- Category 1: Programming & Frameworks -->
+                <div>
+                    <h4 class="text-xl font-bold text-white mb-8 flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-code text-sm text-purple-400"></i>
+                        </div>
+                        Programming & Frameworks
+                    </h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <!-- Java Core -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fab fa-java text-3xl text-purple-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Java Core</h4>
+                            <p class="text-xs text-gray-400">OOPs, Collections, Exception Handling, Multithreading,
+                                JDBC.</p>
+                        </div>
+
+                        <!-- Spring Boot -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-green-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-leaf text-3xl text-green-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Spring Boot</h4>
+                            <p class="text-xs text-gray-400">REST APIs, Security, & Microservices.</p>
+                        </div>
+
+                        <!-- Hibernate -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-amber-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-project-diagram text-3xl text-amber-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Hibernate</h4>
+                            <p class="text-xs text-gray-400">ORM, JPA Implementation & Entity Mapping.</p>
+                        </div>
+
+                        <!-- Microservices -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-indigo-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-network-wired text-3xl text-indigo-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Microservices</h4>
+                            <p class="text-xs text-gray-400">Distributed Architecture & API Gateway.</p>
+                        </div>
+
+                        <!-- Java Servlets -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-teal-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-teal-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-server text-3xl text-teal-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Java Servlets</h4>
+                            <p class="text-xs text-gray-400">Request/Response Lifecycle & Session Management.</p>
+                        </div>
+
+                        <!-- JavaScript -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-yellow-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fab fa-js text-3xl text-yellow-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">JavaScript</h4>
+                            <p class="text-xs text-gray-400">ES6+, DOM Manipulation, Async/Await & APIs.</p>
+                        </div>
+
+                        <!-- React / Frontend -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-cyan-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fab fa-react text-3xl text-cyan-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Frontend</h4>
+                            <p class="text-xs text-gray-400">React, JavaScript (ES6+) & Tailwind CSS.</p>
+                        </div>
+
+                        <!-- HTML5 -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fab fa-html5 text-3xl text-orange-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">HTML5</h4>
+                            <p class="text-xs text-gray-400">Semantic Markup, Accessibility & SEO.</p>
+                        </div>
+
+                        <!-- CSS3 -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fab fa-css3-alt text-3xl text-blue-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">CSS3</h4>
+                            <p class="text-xs text-gray-400">Flexbox, Grid, Animations & Responsive Design.</p>
+                        </div>
                     </div>
-                    <h4 class="font-bold text-white mb-2">Java Core</h4>
-                    <p class="text-xs text-gray-400">OOPs,Collections, Exception Handling, Multithreading, JDBC.</p>
                 </div>
 
-                <!-- Skill 2 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-green-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-leaf text-3xl text-green-400"></i>
+                <!-- Category 2: Databases -->
+                <div>
+                    <h4 class="text-xl font-bold text-white mb-8 flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-database text-sm text-blue-400"></i>
+                        </div>
+                        Databases
+                    </h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <!-- SQL / NoSQL -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-database text-3xl text-blue-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">SQL / NoSQL</h4>
+                            <p class="text-xs text-gray-400">MySQL, PostgreSQL & MongoDB Optimization.</p>
+                        </div>
                     </div>
-                    <h4 class="font-bold text-white mb-2">Spring Boot</h4>
-                    <p class="text-xs text-gray-400">REST APIs, Security, & Microservices.</p>
                 </div>
 
-                <!-- Skill 3 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-database text-3xl text-blue-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">SQL / NoSQL</h4>
-                    <p class="text-xs text-gray-400">MySQL, PostgreSQL & MongoDB Optimization.</p>
-                </div>
+                <!-- Category 3: Version Control & Tools -->
+                <div>
+                    <h4 class="text-xl font-bold text-white mb-8 flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                            <i class="fab fa-git-alt text-sm text-orange-400"></i>
+                        </div>
+                        Version Control & Tools
+                    </h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <!-- Git & DevOps -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fab fa-git-alt text-3xl text-orange-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Git & DevOps</h4>
+                            <p class="text-xs text-gray-400">Version Control, CI/CD Pipelines & GitHub.</p>
+                        </div>
 
-                <!-- Skill 4 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-cyan-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-react text-3xl text-cyan-400"></i>
+                        <!-- Eclipse IDE -->
+                        <div
+                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
+                            <div
+                                class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-code text-3xl text-purple-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">Eclipse IDE</h4>
+                            <p class="text-xs text-gray-400">Development, Debugging & Maven Integration.</p>
+                        </div>
                     </div>
-                    <h4 class="font-bold text-white mb-2">Frontend</h4>
-                    <p class="text-xs text-gray-400">React, JavaScript (ES6+) & Tailwind CSS.</p>
-                </div>
-
-                <!-- Skill 5 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-git-alt text-3xl text-orange-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">Git & DevOps</h4>
-                    <p class="text-xs text-gray-400">Version Control, CI/CD Pipelines & GitHub.</p>
-                </div>
-
-                <!-- Skill 6 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-teal-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-teal-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-server text-3xl text-teal-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">Java Servlets</h4>
-                    <p class="text-xs text-gray-400">Request/Response Lifecycle & Session Management.</p>
-                </div>
-
-                <!-- Skill 7 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-indigo-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-network-wired text-3xl text-indigo-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">Microservices</h4>
-                    <p class="text-xs text-gray-400">Distributed Architecture & API Gateway.</p>
-                </div>
-
-                <!-- Skill 8 -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-amber-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-project-diagram text-3xl text-amber-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">Hibernate</h4>
-                    <p class="text-xs text-gray-400">ORM, JPA Implementation & Entity Mapping.</p>
-                </div>
-
-                <!-- Skill 9: HTML -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-html5 text-3xl text-orange-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">HTML5</h4>
-                    <p class="text-xs text-gray-400">Semantic Markup, Accessibility & SEO.</p>
-                </div>
-
-                <!-- Skill 10: CSS -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-css3-alt text-3xl text-blue-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">CSS3</h4>
-                    <p class="text-xs text-gray-400">Flexbox, Grid, Animations & Responsive Design.</p>
-                </div>
-
-                <!-- Skill 11: JavaScript -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-yellow-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-js text-3xl text-yellow-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">JavaScript</h4>
-                    <p class="text-xs text-gray-400">ES6+, DOM Manipulation, Async/Await & APIs.</p>
-                </div>
-
-                <!-- Skill 12: Eclipse IDE -->
-                <div
-                    class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
-                    <div
-                        class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-code text-3xl text-purple-400"></i>
-                    </div>
-                    <h4 class="font-bold text-white mb-2">Eclipse IDE</h4>
-                    <p class="text-xs text-gray-400">Development, Debugging & Maven Integration.</p>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 
