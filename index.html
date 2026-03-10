@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
@@ -20,9 +20,6 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Spline Viewer for 3D Interactive Scene -->
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.5/build/spline-viewer.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
     <script>
         tailwind.config = {
@@ -202,124 +199,6 @@
             body {
                 cursor: auto;
             }
-        }
-
-        /* --- Hero Spline Viewer (transparent robot) --- */
-        .hero-spline-wrap {
-            position: relative;
-            min-height: 600px;
-            height: calc(100vh - 80px);
-        }
-
-        spline-viewer {
-            --spline-viewer-background: transparent;
-            background: transparent !important;
-        }
-
-        /* Allow full interactivity â€” no pointer-event blocking */
-        spline-viewer::part(canvas),
-        spline-viewer canvas {
-            background: transparent !important;
-        }
-
-        .hero-spline-fade {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            transition: opacity 0.6s ease;
-            z-index: 5;
-        }
-
-        .hero-spline-fade.loaded {
-            opacity: 0;
-        }
-
-        /* --- Spline Showcase Card --- */
-        .spline-showcase-card {
-            position: relative;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 24px;
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .spline-showcase-card:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 0 60px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(139, 92, 246, 0.1);
-        }
-
-        /* Animated Spotlight */
-        .spotlight {
-            position: absolute;
-            border-radius: 50%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.08) 40%, transparent 70%);
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-            opacity: 0;
-            z-index: 1;
-        }
-
-        .spline-showcase-card:hover .spotlight {
-            opacity: 1;
-        }
-
-        /* Spline Loading Skeleton */
-        .spline-loader {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(4px);
-            border-radius: inherit;
-            z-index: 5;
-            transition: opacity 0.5s ease;
-        }
-
-        .spline-loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spline-loader-ring {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(139, 92, 246, 0.2);
-            border-top-color: #8b5cf6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Spotlight SVG (decorative) */
-        @keyframes spotlight-appear {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -80%) scale(0.8);
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(-50%, -80%) scale(1);
-            }
-        }
-
-        .animate-spotlight {
-            animation: spotlight-appear 1.2s ease forwards 0.5s;
         }
 
         /* --- Blobs & Noise --- */
@@ -521,92 +400,111 @@
     </div>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center relative pt-20 overflow-hidden">
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
         <!-- Blobs -->
         <div class="blob w-96 h-96 bg-purple-600/20 rounded-full top-0 left-0 mix-blend-screen animate-pulse-slow">
         </div>
         <div class="blob w-96 h-96 bg-cyan-600/20 rounded-full bottom-0 right-0 mix-blend-screen animate-pulse-slow"
             style="animation-delay: -5s"></div>
 
-        <!-- Two-column layout: text left, BIG robot right -->
-        <div class="w-full flex flex-col md:flex-row items-center min-h-screen">
+        <div class="max-w-7xl mx-auto px-6 z-10 relative">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="text-center md:text-left">
+                    <div
+                        class="inline-block mb-4 px-4 py-1.5 rounded-full glass text-xs font-medium text-cyan-400 reveal uppercase tracking-[0.2em] border border-cyan-500/20">
+                        Java Developer
+                    </div>
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-tight mb-6 reveal stagger-1 tracking-tight">
+                        Mahantesh <span class="text-gradient">Chikkeri</span>
+                    </h1>
+                    <p class="text-lg text-gray-400 mb-10 reveal stagger-2 font-light leading-relaxed">
+                        Passionate Java Developer | Focused on <span class="text-white font-medium">Learning, Building,
+                            and Growing</span>.
+                    </p>
 
-            <!-- Left: Text Content -->
-            <div
-                class="relative z-20 flex-shrink-0 w-full md:w-[42%] px-8 md:pl-28 md:pr-6 pt-10 md:pt-0 text-center md:text-left">
-                <div
-                    class="inline-block mb-4 px-4 py-1.5 rounded-full glass text-xs font-medium text-cyan-400 reveal uppercase tracking-[0.2em] border border-cyan-500/20">
-                    Java Developer
+                    <!-- Floating Social Icons -->
+                    <div class="flex justify-center md:justify-start gap-6 mb-16 reveal stagger-3">
+                        <a href="https://github.com/Mahantesh-c"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover"><i class="fab fa-github text-xl"></i></a>
+                        <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover"><i class="fab fa-linkedin-in text-xl"></i></a>
+                        <a href="https://maps.app.goo.gl/KFhqjRhNvA6ewh5Y6"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover" title="Gadag, Karnataka"><i
+                                class="fas fa-map-marker-alt text-xl"></i></a>
+                        <a href="mailto:mahanteshchikkeri05@gmail.com"
+                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                            data-cursor="hover"><i class="fas fa-envelope text-xl"></i></a>
+                    </div>
                 </div>
-                <h1
-                    class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6 reveal stagger-1 tracking-tight">
-                    Mahantesh <span class="text-gradient">Chikkeri</span>
-                </h1>
-                <p class="text-lg text-gray-400 mb-10 reveal stagger-2 font-light leading-relaxed">
-                    Passionate Java Developer | Focused on <span class="text-white font-medium">Learning, Building, and
-                        Growing</span>.
-                </p>
 
-                <!-- Social Icons -->
-                <div class="flex justify-center md:justify-start gap-6 mb-10 reveal stagger-3">
-                    <a href="https://github.com/Mahantesh-c"
-                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                        data-cursor="hover"><i class="fab fa-github text-xl"></i></a>
-                    <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
-                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                        data-cursor="hover"><i class="fab fa-linkedin-in text-xl"></i></a>
-                    <a href="https://maps.app.goo.gl/KFhqjRhNvA6ewh5Y6"
-                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                        data-cursor="hover" title="Gadag, Karnataka"><i class="fas fa-map-marker-alt text-xl"></i></a>
-                    <a href="mailto:mahanteshchikkeri05@gmail.com"
-                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                        data-cursor="hover"><i class="fas fa-envelope text-xl"></i></a>
-                </div>
+                <!-- Profile Picture -->
+                <div class="flex justify-center reveal stagger-2 relative perspective-container">
+                    <!-- Tilt Card Container -->
+                    <div class="tilt-card w-64 h-64 md:w-80 md:h-80 cursor-pointer">
+                        <div class="tilt-card-inner relative w-full h-full">
 
-                <!-- CTA Buttons -->
-                <div class="flex flex-wrap justify-center md:justify-start gap-4 reveal stagger-4">
-                    <a href="#work"
-                        class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-indigo-500/25">
-                        <i class="fas fa-rocket text-xs"></i> View My Work
-                    </a>
-                    <a href="#contact"
-                        class="inline-flex items-center gap-2 px-6 py-3 rounded-full glass text-white font-bold text-sm hover:bg-white/10 transition-all hover:-translate-y-0.5 border border-white/10">
-                        <i class="fas fa-envelope text-xs"></i> Get in Touch
-                    </a>
+                            <!-- 3D Shadow -->
+                            <div class="tilt-shadow"></div>
+
+                            <!-- Animated Glow Background -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-cyan-500 rounded-full blur-[40px] opacity-40 animate-pulse-slow">
+                            </div>
+
+                            <!-- Glitch Border -->
+                            <div class="glitch-border"></div>
+
+                            <!-- Rotating Rings -->
+                            <div class="absolute -inset-4 border border-white/10 rounded-full animate-spin-slow pointer-events-none border-dashed"
+                                style="transform: translateZ(20px);"></div>
+                            <div class="absolute -inset-8 border border-white/5 rounded-full animate-spin-slow pointer-events-none"
+                                style="animation-direction: reverse; animation-duration: 15s; transform: translateZ(10px);">
+                            </div>
+
+                            <!-- Floating Icons (3D Depth) -->
+                            <div class="absolute -top-4 -right-4 w-10 h-10 glass rounded-full flex items-center justify-center animate-bounce delay-100 z-30 shadow-lg shadow-cyan-500/20"
+                                style="transform: translateZ(50px);">
+                                <i class="fas fa-code text-cyan-400 text-sm"></i>
+                            </div>
+                            <div class="absolute bottom-8 -left-8 w-12 h-12 glass rounded-full flex items-center justify-center animate-float delay-300 z-30 shadow-lg shadow-indigo-500/20"
+                                style="transform: translateZ(40px);">
+                                <i class="fas fa-terminal text-indigo-400"></i>
+                            </div>
+                            <div class="absolute -bottom-2 right-0 w-8 h-8 glass rounded-full flex items-center justify-center animate-bounce delay-500 z-30 shadow-lg shadow-purple-500/20"
+                                style="transform: translateZ(30px);">
+                                <i class="fas fa-bolt text-purple-400 text-xs"></i>
+                            </div>
+
+                            <!-- Main Image Container -->
+                            <div class="relative w-full h-full rounded-full glass overflow-hidden border-4 border-white/5 z-20"
+                                style="transform: translateZ(0px);">
+                                <!-- Holographic Overlays -->
+                                <div class="scanlines"></div>
+                                <div class="holographic-overlay"></div>
+
+                                <!-- Image -->
+                                <!-- 
+                                    ==========================================
+                                    [!] REPLACE THE IMAGE BELOW WITH YOUR OWN
+                                    ==========================================
+                                -->
+                                <img src="./img.jpeg" alt="Mahantesh Chikkeri" class="w-full h-full object-cover"
+                                    data-instruction="Replace src with your image URL">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Right: BIG Fully Interactive Spline Robot -->
-            <div class="hero-spline-wrap flex-1 w-full md:w-[58%] relative">
-                <!-- Loading spinner -->
-                <div class="hero-spline-fade" id="hero-spline-loading">
-                    <div class="spline-loader-ring"></div>
-                </div>
-                <!-- Spline 3D Robot — no pointer-event blocking, fully interactive -->
-                <spline-viewer id="hero-spline-viewer"
-                    url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                    style="width: 100%; height: 100%; min-height: 600px; display: block; background: transparent;">
-                </spline-viewer>
-                <!-- Watermark cover: blur + gradient fade -->
-                <div style="
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    width: 220px;
-                    height: 60px;
-                    background: linear-gradient(to top left, rgba(10,10,15,0.95) 0%, rgba(10,10,15,0.7) 40%, transparent 75%);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
-                    z-index: 10;
-                    pointer-events: none;
-                "></div>
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 reveal stagger-4">
+                <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
             </div>
-
-        </div>
-
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40 z-10">
-            <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
         </div>
     </section>
 
@@ -990,7 +888,7 @@
                             </div>
 
                             <h4 class="text-xl font-bold text-white mb-1">BCA Computer Application</h4>
-                            <h5 class="text-sm text-gray-400 mb-4 font-medium">KLEâ€™S JT COLLEGE GADAG</h5>
+                            <h5 class="text-sm text-gray-400 mb-4 font-medium">KLE’S JT COLLEGE GADAG</h5>
                             <p class="text-sm text-gray-400 leading-relaxed mb-2">
                                 CGPA: <span class="text-white font-bold">8.24</span>
                             </p>
@@ -1145,7 +1043,7 @@
                                         <p
                                             class="text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors">
                                             Developed and trained <span class="text-indigo-300">SVM & CNN</span> models
-                                            achieving an impressive <span class="text-white font-bold">88â€“90%
+                                            achieving an impressive <span class="text-white font-bold">88–90%
                                                 accuracy</span>.</p>
                                     </li>
                                     <li class="flex items-start gap-3 group/item">
@@ -1474,39 +1372,6 @@
             }
 
             // --- Typewriter Effect Removed ---
-
-            // --- Hero Spline Loading + Watermark Removal ---
-            const heroSplineViewer = document.getElementById('hero-spline-viewer');
-            const heroSplineLoading = document.getElementById('hero-spline-loading');
-
-            function hideSplineWatermark(viewer) {
-                try {
-                    const sr = viewer.shadowRoot;
-                    if (!sr) return;
-                    // Try common selectors used by Spline viewer across versions
-                    const selectors = ['#logo', 'a[href*="spline"]', '.logo', '[class*="logo"]', 'a[target="_blank"]'];
-                    selectors.forEach(sel => {
-                        const el = sr.querySelector(sel);
-                        if (el) el.style.setProperty('display', 'none', 'important');
-                    });
-                } catch (e) { }
-            }
-
-            if (heroSplineViewer && heroSplineLoading) {
-                heroSplineViewer.addEventListener('load', () => {
-                    heroSplineLoading.classList.add('loaded');
-                    setTimeout(() => heroSplineLoading.remove(), 700);
-                    // Hide watermark once scene is loaded
-                    hideSplineWatermark(heroSplineViewer);
-                    // Re-run after a short delay in case it renders late
-                    setTimeout(() => hideSplineWatermark(heroSplineViewer), 1500);
-                });
-                // Fallback: hide after 6s
-                setTimeout(() => {
-                    heroSplineLoading && heroSplineLoading.classList.add('loaded');
-                    hideSplineWatermark(heroSplineViewer);
-                }, 6000);
-            }
 
             // --- Mobile Menu ---
             const toggleMenu = () => {
