@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
@@ -20,6 +20,8 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Photo Hero (RESTORED) -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
     <script>
         tailwind.config = {
@@ -201,6 +203,124 @@
             }
         }
 
+        /* --- Hero Spline Viewer (transparent robot) --- */
+        .hero-spline-wrap {
+            position: relative;
+            min-height: 600px;
+            height: calc(100vh - 80px);
+        }
+
+        spline-viewer {
+            --spline-viewer-background: transparent;
+            background: transparent !important;
+        }
+
+        /* Allow full interactivity â€” no pointer-event blocking */
+        spline-viewer::part(canvas),
+        spline-viewer canvas {
+            background: transparent !important;
+        }
+
+        .hero-spline-fade {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+            z-index: 5;
+        }
+
+        .hero-spline-fade.loaded {
+            opacity: 0;
+        }
+
+        /* --- Spline Showcase Card --- */
+        .spline-showcase-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .spline-showcase-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Animated Spotlight */
+        .spotlight {
+            position: absolute;
+            border-radius: 50%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.08) 40%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .spline-showcase-card:hover .spotlight {
+            opacity: 1;
+        }
+
+        /* Spline Loading Skeleton */
+        .spline-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: inherit;
+            z-index: 5;
+            transition: opacity 0.5s ease;
+        }
+
+        .spline-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spline-loader-ring {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(139, 92, 246, 0.2);
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Spotlight SVG (decorative) */
+        @keyframes spotlight-appear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -80%) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -80%) scale(1);
+            }
+        }
+
+        .animate-spotlight {
+            animation: spotlight-appear 1.2s ease forwards 0.5s;
+        }
+
         /* --- Blobs & Noise --- */
         .noise {
             position: fixed;
@@ -328,6 +448,332 @@
         }
 
         /* --- Typewriter Removed --- */
+
+        /* =============================================
+           3D PIN CARDS
+           ============================================= */
+
+        /* Outer wrapper — sets up the group hover context */
+        .pin-container {
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            /* perspective for the tilt */
+            perspective: 1000px;
+            /* height needed so the perspective overlay has room */
+            min-height: 380px;
+        }
+
+        /* The inner card that TILTS back on hover */
+        .pin-card-wrap {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotateX(70deg) translateZ(0);
+            /* static perspective baked in */
+        }
+
+        .pin-card-inner {
+            transform: translate(-50%, -50%) rotateX(0deg) scale(1);
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            width: 320px;
+        }
+
+        .pin-container:hover .pin-card-inner {
+            transform: translate(-50%, -50%) rotateX(40deg) scale(0.8);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        /* Perspective overlay — contains the beam + rings, hidden by default */
+        .pin-perspective {
+            width: 384px;
+            /* w-96 */
+            height: 320px;
+            /* h-80 */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 60;
+            margin-top: -28px;
+            /* -mt-7 */
+        }
+
+        .pin-container:hover .pin-perspective {
+            opacity: 1;
+        }
+
+        /* Title badge at the top of the overlay */
+        .pin-title-badge {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #09090b;
+            /* zinc-950 */
+            border-radius: 9999px;
+            padding: 2px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+            z-index: 10;
+            text-decoration: none;
+        }
+
+        .pin-title-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            position: relative;
+            z-index: 20;
+            padding: 2px 0;
+        }
+
+        .pin-title-shine {
+            position: absolute;
+            bottom: 0;
+            left: 18px;
+            height: 1px;
+            width: calc(100% - 36px);
+            background: linear-gradient(to right, transparent, rgba(52, 211, 153, 0.9), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .pin-container:hover .pin-title-shine {
+            opacity: 0.4;
+        }
+
+        /* Rings wrapper — has the perspective baked in */
+        .pin-rings-wrap {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: 1.5px;
+            margin-top: 16px;
+            transform: translate(-50%, -50%) rotateX(70deg) translateZ(0);
+        }
+
+        /* Individual ring */
+        .pin-ring {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(14, 165, 233, 0.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+        }
+
+        .pin-container:hover .pin-ring {
+            animation: pin-ring-pulse 6s ease infinite;
+        }
+
+        .pin-ring:nth-child(2) {
+            animation-delay: 2s !important;
+        }
+
+        .pin-ring:nth-child(3) {
+            animation-delay: 4s !important;
+        }
+
+        @keyframes pin-ring-pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Laser beam — the vertical cyan line rising from the pin dot */
+        .pin-beam-wrap {
+            position: absolute;
+            right: 50%;
+            bottom: 50%;
+            transform: translateY(14px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pin-beam-blur {
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to top, transparent, #06b6d4);
+            filter: blur(2px);
+            transition: height 0.5s ease;
+        }
+
+        .pin-beam-line {
+            position: absolute;
+            top: 0;
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to top, transparent, #06b6d4);
+            transition: height 0.5s ease;
+        }
+
+        .pin-container:hover .pin-beam-blur,
+        .pin-container:hover .pin-beam-line {
+            height: 160px;
+        }
+
+        .pin-dot-outer {
+            position: absolute;
+            right: 50%;
+            bottom: 50%;
+            transform: translate(1.5px, 14px);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #0891b2;
+            filter: blur(3px);
+            z-index: 40;
+        }
+
+        .pin-dot-inner {
+            position: absolute;
+            right: 50%;
+            bottom: 50%;
+            transform: translate(0.5px, 14px);
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: #67e8f9;
+            z-index: 40;
+        }
+
+        /* Card content styles */
+        .pin-card-content {
+            color: rgba(248, 250, 252, 0.5);
+            width: 280px;
+            min-height: 280px;
+            background: linear-gradient(to bottom, rgba(30, 41, 59, 0.5), rgba(30, 41, 59, 0));
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 1rem;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* wave animation for the demo */
+        @keyframes pin-wave {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* =============================================
+           MARQUEE / INFINITE SCROLL
+           ============================================= */
+        .marquee-wrapper {
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee-scroll 30s linear infinite;
+        }
+
+        .marquee-track.reverse {
+            animation-direction: reverse;
+        }
+
+        .marquee-wrapper:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee-scroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-card {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            margin-right: 1.25rem;
+            width: 190px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+
+        .marquee-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.35);
+            box-shadow: 0 8px 28px rgba(139, 92, 246, 0.15);
+        }
+
+        .marquee-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 0.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .marquee-card h5 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .marquee-card p {
+            font-size: 0.7rem;
+            color: rgba(156, 163, 175, 0.85);
+            line-height: 1.4;
+        }
     </style>
 </head>
 
@@ -400,111 +846,118 @@
     </div>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
+    <section id="home" class="min-h-screen flex items-center relative pt-20 overflow-hidden">
         <!-- Blobs -->
         <div class="blob w-96 h-96 bg-purple-600/20 rounded-full top-0 left-0 mix-blend-screen animate-pulse-slow">
         </div>
         <div class="blob w-96 h-96 bg-cyan-600/20 rounded-full bottom-0 right-0 mix-blend-screen animate-pulse-slow"
             style="animation-delay: -5s"></div>
 
-        <div class="max-w-7xl mx-auto px-6 z-10 relative">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
-                <div class="text-center md:text-left">
+        <!-- Hero inner — centered container -->
+        <div
+            class="w-full max-w-[1440px] mx-auto px-8 md:px-16 flex flex-col md:flex-row items-center gap-12 min-h-screen">
+
+            <!-- Left: Text Content -->
+            <div class="relative z-20 flex-1 min-w-0 pt-10 md:pt-0 text-center md:text-left">
+                <div
+                    class="inline-block mb-5 px-4 py-1.5 rounded-full glass text-xs font-medium text-cyan-400 reveal uppercase tracking-[0.2em] border border-cyan-500/20">
+                    Java Developer
+                </div>
+                <h1
+                    class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6 reveal stagger-1 tracking-tight">
+                    Mahantesh <span class="text-gradient">Chikkeri</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-400 mb-10 reveal stagger-2 font-light leading-relaxed max-w-xl">
+                    Passionate Java Developer | Focused on <span class="text-white font-medium">Learning, Building, and
+                        Growing</span>.
+                </p>
+
+                <!-- Social Icons -->
+                <div class="flex justify-center md:justify-start gap-5 mb-10 reveal stagger-3">
+                    <a href="https://github.com/Mahantesh-c"
+                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                        data-cursor="hover"><i class="fab fa-github text-xl"></i></a>
+                    <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
+                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                        data-cursor="hover"><i class="fab fa-linkedin-in text-xl"></i></a>
+                    <a href="https://maps.app.goo.gl/KFhqjRhNvA6ewh5Y6"
+                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                        data-cursor="hover" title="Gadag, Karnataka"><i class="fas fa-map-marker-alt text-xl"></i></a>
+                    <a href="mailto:mahanteshchikkeri05@gmail.com"
+                        class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
+                        data-cursor="hover"><i class="fas fa-envelope text-xl"></i></a>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 reveal stagger-4">
+                    <a href="#work"
+                        class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-indigo-500/25">
+                        <i class="fas fa-rocket text-xs"></i> View My Work
+                    </a>
+                    <a href="#contact"
+                        class="inline-flex items-center gap-2 px-7 py-3 rounded-full glass text-white font-bold text-sm hover:bg-white/10 transition-all hover:-translate-y-0.5 border border-white/10">
+                        <i class="fas fa-envelope text-xs"></i> Get in Touch
+                    </a>
+                </div>
+
+
+            </div>
+
+            <!-- Right: Profile Photo Card -->
+            <div class="relative z-20 flex-shrink-0 w-full md:w-auto flex justify-center reveal stagger-2">
+                <!-- Glow rings -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="w-[420px] h-[420px] rounded-full border border-purple-500/10 animate-spin-slow"></div>
+                    <div class="absolute w-[340px] h-[340px] rounded-full border border-cyan-500/10"
+                        style="animation: spin 18s linear infinite reverse"></div>
+                </div>
+
+                <!-- Photo card -->
+                <div class="hero-photo-card relative w-64 h-64 md:w-80 md:h-80">
+                    <!-- Gradient border glow -->
                     <div
-                        class="inline-block mb-4 px-4 py-1.5 rounded-full glass text-xs font-medium text-cyan-400 reveal uppercase tracking-[0.2em] border border-cyan-500/20">
-                        Java Developer
+                        class="absolute -inset-2 rounded-full bg-gradient-to-br from-purple-500/40 via-indigo-500/20 to-cyan-500/40 blur-md">
                     </div>
-                    <h1
-                        class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-tight mb-6 reveal stagger-1 tracking-tight">
-                        Mahantesh <span class="text-gradient">Chikkeri</span>
-                    </h1>
-                    <p class="text-lg text-gray-400 mb-10 reveal stagger-2 font-light leading-relaxed">
-                        Passionate Java Developer | Focused on <span class="text-white font-medium">Learning, Building,
-                            and Growing</span>.
-                    </p>
 
-                    <!-- Floating Social Icons -->
-                    <div class="flex justify-center md:justify-start gap-6 mb-16 reveal stagger-3">
-                        <a href="https://github.com/Mahantesh-c"
-                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                            data-cursor="hover"><i class="fab fa-github text-xl"></i></a>
-                        <a href="https://www.linkedin.com/in/mahanteshchikkeri/"
-                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                            data-cursor="hover"><i class="fab fa-linkedin-in text-xl"></i></a>
-                        <a href="https://maps.app.goo.gl/KFhqjRhNvA6ewh5Y6"
-                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                            data-cursor="hover" title="Gadag, Karnataka"><i
-                                class="fas fa-map-marker-alt text-xl"></i></a>
-                        <a href="mailto:mahanteshchikkeri05@gmail.com"
-                            class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-white transition-all hover:-translate-y-2 duration-300 hover-glow"
-                            data-cursor="hover"><i class="fas fa-envelope text-xl"></i></a>
-                    </div>
-                </div>
+                    <!-- Card body -->
+                    <div
+                        class="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 bg-dark-900 shadow-2xl shadow-purple-900/40">
+                        <!-- Photo -->
+                        <img src="./IMG_20250725_165150.jpg" alt="Mahantesh Chikkeri"
+                            class="w-full h-full object-cover object-center transform hover:scale-110 transition-transform duration-700"
+                            loading="eager" decoding="async">
 
-                <!-- Profile Picture -->
-                <div class="flex justify-center reveal stagger-2 relative perspective-container">
-                    <!-- Tilt Card Container -->
-                    <div class="tilt-card w-64 h-64 md:w-80 md:h-80 cursor-pointer">
-                        <div class="tilt-card-inner relative w-full h-full">
-
-                            <!-- 3D Shadow -->
-                            <div class="tilt-shadow"></div>
-
-                            <!-- Animated Glow Background -->
-                            <div
-                                class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-cyan-500 rounded-full blur-[40px] opacity-40 animate-pulse-slow">
-                            </div>
-
-                            <!-- Glitch Border -->
-                            <div class="glitch-border"></div>
-
-                            <!-- Rotating Rings -->
-                            <div class="absolute -inset-4 border border-white/10 rounded-full animate-spin-slow pointer-events-none border-dashed"
-                                style="transform: translateZ(20px);"></div>
-                            <div class="absolute -inset-8 border border-white/5 rounded-full animate-spin-slow pointer-events-none"
-                                style="animation-direction: reverse; animation-duration: 15s; transform: translateZ(10px);">
-                            </div>
-
-                            <!-- Floating Icons (3D Depth) -->
-                            <div class="absolute -top-4 -right-4 w-10 h-10 glass rounded-full flex items-center justify-center animate-bounce delay-100 z-30 shadow-lg shadow-cyan-500/20"
-                                style="transform: translateZ(50px);">
-                                <i class="fas fa-code text-cyan-400 text-sm"></i>
-                            </div>
-                            <div class="absolute bottom-8 -left-8 w-12 h-12 glass rounded-full flex items-center justify-center animate-float delay-300 z-30 shadow-lg shadow-indigo-500/20"
-                                style="transform: translateZ(40px);">
-                                <i class="fas fa-terminal text-indigo-400"></i>
-                            </div>
-                            <div class="absolute -bottom-2 right-0 w-8 h-8 glass rounded-full flex items-center justify-center animate-bounce delay-500 z-30 shadow-lg shadow-purple-500/20"
-                                style="transform: translateZ(30px);">
-                                <i class="fas fa-bolt text-purple-400 text-xs"></i>
-                            </div>
-
-                            <!-- Main Image Container -->
-                            <div class="relative w-full h-full rounded-full glass overflow-hidden border-4 border-white/5 z-20"
-                                style="transform: translateZ(0px);">
-                                <!-- Holographic Overlays -->
-                                <div class="scanlines"></div>
-                                <div class="holographic-overlay"></div>
-
-                                <!-- Image -->
-                                <!-- 
-                                    ==========================================
-                                    [!] REPLACE THE IMAGE BELOW WITH YOUR OWN
-                                    ==========================================
-                                -->
-                                <img src="./img.jpeg" alt="Mahantesh Chikkeri" class="w-full h-full object-cover"
-                                    data-instruction="Replace src with your image URL">
-                            </div>
+                        <!-- Overlay -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end items-center pb-8">
+                            <p class="text-white font-bold text-sm font-display">Mahantesh</p>
+                            <p class="text-cyan-400 text-[10px] uppercase tracking-widest mt-1">Java Developer</p>
                         </div>
+
+
+                    </div>
+
+                    <!-- Floating skill badges -->
+                    <div class="absolute -left-10 top-1/4 px-3 py-2 rounded-xl glass border border-white/10 text-xs font-medium text-white shadow-lg flex items-center gap-2 animate-float"
+                        style="animation-delay:0s">
+                        <i class="fab fa-java text-orange-400 text-base"></i> Java
+                    </div>
+                    <div class="absolute -right-10 top-1/2 px-3 py-2 rounded-xl glass border border-white/10 text-xs font-medium text-white shadow-lg flex items-center gap-2 animate-float"
+                        style="animation-delay:-2s">
+                        <i class="fas fa-leaf text-green-400 text-base"></i> Spring Boot
+                    </div>
+                    <div class="absolute -left-8 bottom-1/4 px-3 py-2 rounded-xl glass border border-white/10 text-xs font-medium text-white shadow-lg flex items-center gap-2 animate-float"
+                        style="animation-delay:-4s">
+                        <i class="fas fa-database text-blue-400 text-base"></i> SQL
                     </div>
                 </div>
             </div>
 
-            <!-- Scroll Indicator -->
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 reveal stagger-4">
-                <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
-            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40 z-10">
+            <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
         </div>
     </section>
 
@@ -577,232 +1030,334 @@
             <h3 class="text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1">Technical <span
                     class="text-gradient">Skills</span></h3>
 
-            <!-- Categorized Tech Stack -->
-            <div class="space-y-16 reveal stagger-2">
+            <!-- Marquee rows -->
+            <div class="space-y-12 reveal stagger-2">
 
-                <!-- Category 1: Programming & Frameworks -->
+                <!-- Row 1 — Programming & Frameworks (left) -->
                 <div>
-                    <h4 class="text-xl font-bold text-white mb-8 flex items-center gap-4">
+                    <h4 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
                             <i class="fas fa-code text-sm text-purple-400"></i>
                         </div>
-                        Programming & Frameworks
+                        Programming &amp; Frameworks
                     </h4>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <!-- Java Core -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-java text-3xl text-purple-400"></i>
+                    <div class="marquee-wrapper">
+                        <div class="marquee-track">
+                            <!-- set A -->
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-purple-500/10"><i
+                                        class="fab fa-java text-purple-400"></i></div>
+                                <h5>Java Core</h5>
+                                <p>OOPs, Collections, JDBC &amp; Multithreading.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Java Core</h4>
-                            <p class="text-xs text-gray-400">OOPs, Collections, Exception Handling, Multithreading,
-                                JDBC.</p>
-                        </div>
-
-                        <!-- Spring Boot -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-green-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-leaf text-3xl text-green-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-green-500/10"><i
+                                        class="fas fa-leaf text-green-400"></i></div>
+                                <h5>Spring Boot</h5>
+                                <p>REST APIs, Security &amp; Microservices.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Spring Boot</h4>
-                            <p class="text-xs text-gray-400">REST APIs, Security, & Microservices.</p>
-                        </div>
-
-                        <!-- Hibernate -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-amber-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-project-diagram text-3xl text-amber-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-amber-500/10"><i
+                                        class="fas fa-project-diagram text-amber-400"></i></div>
+                                <h5>Hibernate</h5>
+                                <p>ORM, JPA &amp; Entity Mapping.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Hibernate</h4>
-                            <p class="text-xs text-gray-400">ORM, JPA Implementation & Entity Mapping.</p>
-                        </div>
-
-                        <!-- Microservices -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-indigo-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-network-wired text-3xl text-indigo-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-indigo-500/10"><i
+                                        class="fas fa-network-wired text-indigo-400"></i></div>
+                                <h5>Microservices</h5>
+                                <p>Distributed Architecture &amp; API Gateway.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Microservices</h4>
-                            <p class="text-xs text-gray-400">Distributed Architecture & API Gateway.</p>
-                        </div>
-
-                        <!-- Java Servlets -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-teal-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-teal-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-server text-3xl text-teal-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-teal-500/10"><i
+                                        class="fas fa-server text-teal-400"></i></div>
+                                <h5>Java Servlets</h5>
+                                <p>Request/Response &amp; Session Mgmt.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Java Servlets</h4>
-                            <p class="text-xs text-gray-400">Request/Response Lifecycle & Session Management.</p>
-                        </div>
-
-                        <!-- JavaScript -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-yellow-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-js text-3xl text-yellow-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-yellow-500/10"><i
+                                        class="fab fa-js text-yellow-400"></i></div>
+                                <h5>JavaScript</h5>
+                                <p>ES6+, DOM, Async/Await &amp; APIs.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">JavaScript</h4>
-                            <p class="text-xs text-gray-400">ES6+, DOM Manipulation, Async/Await & APIs.</p>
-                        </div>
-
-                        <!-- React / Frontend -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-cyan-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-react text-3xl text-cyan-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-cyan-500/10"><i class="fab fa-react text-cyan-400"></i>
+                                </div>
+                                <h5>Frontend</h5>
+                                <p>React, JS &amp; Tailwind CSS.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Frontend</h4>
-                            <p class="text-xs text-gray-400">React, JavaScript (ES6+) & Tailwind CSS.</p>
-                        </div>
-
-                        <!-- HTML5 -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-html5 text-3xl text-orange-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-orange-500/10"><i
+                                        class="fab fa-html5 text-orange-400"></i></div>
+                                <h5>HTML5</h5>
+                                <p>Semantic Markup, A11y &amp; SEO.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">HTML5</h4>
-                            <p class="text-xs text-gray-400">Semantic Markup, Accessibility & SEO.</p>
-                        </div>
-
-                        <!-- CSS3 -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-css3-alt text-3xl text-blue-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i
+                                        class="fab fa-css3-alt text-blue-400"></i></div>
+                                <h5>CSS3</h5>
+                                <p>Flexbox, Grid &amp; Animations.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">CSS3</h4>
-                            <p class="text-xs text-gray-400">Flexbox, Grid, Animations & Responsive Design.</p>
-                        </div>
-
-                        <!-- Python -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-python text-3xl text-blue-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i
+                                        class="fab fa-python text-blue-400"></i></div>
+                                <h5>Python</h5>
+                                <p>Scripting &amp; Automation.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Python</h4>
-                            <p class="text-xs text-gray-400">Data Structures, Scripting & Automation.</p>
-                        </div>
-
-                        <!-- Django -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-emerald-600/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-emerald-600/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-cubes text-3xl text-emerald-500"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-emerald-600/10"><i
+                                        class="fas fa-cubes text-emerald-500"></i></div>
+                                <h5>Django</h5>
+                                <p>Web Framework &amp; Rapid Dev.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Django</h4>
-                            <p class="text-xs text-gray-400">Web Framework, Admin Panel & Rapid Development.</p>
+                            <!-- set B (duplicate for seamless loop) -->
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-purple-500/10"><i
+                                        class="fab fa-java text-purple-400"></i></div>
+                                <h5>Java Core</h5>
+                                <p>OOPs, Collections, JDBC &amp; Multithreading.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-green-500/10"><i
+                                        class="fas fa-leaf text-green-400"></i></div>
+                                <h5>Spring Boot</h5>
+                                <p>REST APIs, Security &amp; Microservices.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-amber-500/10"><i
+                                        class="fas fa-project-diagram text-amber-400"></i></div>
+                                <h5>Hibernate</h5>
+                                <p>ORM, JPA &amp; Entity Mapping.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-indigo-500/10"><i
+                                        class="fas fa-network-wired text-indigo-400"></i></div>
+                                <h5>Microservices</h5>
+                                <p>Distributed Architecture &amp; API Gateway.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-teal-500/10"><i
+                                        class="fas fa-server text-teal-400"></i></div>
+                                <h5>Java Servlets</h5>
+                                <p>Request/Response &amp; Session Mgmt.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-yellow-500/10"><i
+                                        class="fab fa-js text-yellow-400"></i></div>
+                                <h5>JavaScript</h5>
+                                <p>ES6+, DOM, Async/Await &amp; APIs.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-cyan-500/10"><i class="fab fa-react text-cyan-400"></i>
+                                </div>
+                                <h5>Frontend</h5>
+                                <p>React, JS &amp; Tailwind CSS.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-orange-500/10"><i
+                                        class="fab fa-html5 text-orange-400"></i></div>
+                                <h5>HTML5</h5>
+                                <p>Semantic Markup, A11y &amp; SEO.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i
+                                        class="fab fa-css3-alt text-blue-400"></i></div>
+                                <h5>CSS3</h5>
+                                <p>Flexbox, Grid &amp; Animations.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i
+                                        class="fab fa-python text-blue-400"></i></div>
+                                <h5>Python</h5>
+                                <p>Scripting &amp; Automation.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-emerald-600/10"><i
+                                        class="fas fa-cubes text-emerald-500"></i></div>
+                                <h5>Django</h5>
+                                <p>Web Framework &amp; Rapid Dev.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Category 2: Databases -->
+                <!-- Row 2 — Databases (right / reversed) -->
                 <div>
-                    <h4 class="text-xl font-bold text-white mb-8 flex items-center gap-4">
+                    <h4 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
                             <i class="fas fa-database text-sm text-blue-400"></i>
                         </div>
                         Databases
                     </h4>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <!-- SQL / NoSQL -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-blue-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-database text-3xl text-blue-400"></i>
+                    <div class="marquee-wrapper">
+                        <div class="marquee-track reverse">
+                            <!-- set A -->
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i
+                                        class="fas fa-database text-blue-400"></i></div>
+                                <h5>MySQL</h5>
+                                <p>Relational DB &amp; Query Optimization.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">MySQL / NoSQL</h4>
-                            <p class="text-xs text-gray-400">MySQL, & MongoDB Optimization.</p>
-                        </div>
-
-                        <!-- Oracle SQL -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-red-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-database text-3xl text-red-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-green-500/10"><i
+                                        class="fas fa-leaf text-green-400"></i></div>
+                                <h5>MongoDB</h5>
+                                <p>NoSQL, Documents &amp; Aggregation.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Oracle SQL</h4>
-                            <p class="text-xs text-gray-400">PL/SQL, Complex Queries & Performance Tuning.</p>
-                        </div>
-
-                        <!-- PostgreSQL -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-indigo-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-database text-3xl text-indigo-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-red-500/10"><i
+                                        class="fas fa-database text-red-400"></i></div>
+                                <h5>Oracle SQL</h5>
+                                <p>PL/SQL, Queries &amp; Perf. Tuning.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">PostgreSQL</h4>
-                            <p class="text-xs text-gray-400">Advanced Functions, Indexing & Data Integrity.</p>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-indigo-500/10"><i
+                                        class="fas fa-database text-indigo-400"></i></div>
+                                <h5>PostgreSQL</h5>
+                                <p>Indexing, Functions &amp; Integrity.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-cyan-500/10"><i class="fas fa-table text-cyan-400"></i>
+                                </div>
+                                <h5>SQL / DDL / DML</h5>
+                                <p>Joins, Subqueries &amp; Transactions.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-purple-500/10"><i
+                                        class="fas fa-sitemap text-purple-400"></i></div>
+                                <h5>JPA</h5>
+                                <p>Entity Mapping &amp; Persistence Layer.</p>
+                            </div>
+                            <!-- set B -->
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i
+                                        class="fas fa-database text-blue-400"></i></div>
+                                <h5>MySQL</h5>
+                                <p>Relational DB &amp; Query Optimization.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-green-500/10"><i
+                                        class="fas fa-leaf text-green-400"></i></div>
+                                <h5>MongoDB</h5>
+                                <p>NoSQL, Documents &amp; Aggregation.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-red-500/10"><i
+                                        class="fas fa-database text-red-400"></i></div>
+                                <h5>Oracle SQL</h5>
+                                <p>PL/SQL, Queries &amp; Perf. Tuning.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-indigo-500/10"><i
+                                        class="fas fa-database text-indigo-400"></i></div>
+                                <h5>PostgreSQL</h5>
+                                <p>Indexing, Functions &amp; Integrity.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-cyan-500/10"><i class="fas fa-table text-cyan-400"></i>
+                                </div>
+                                <h5>SQL / DDL / DML</h5>
+                                <p>Joins, Subqueries &amp; Transactions.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-purple-500/10"><i
+                                        class="fas fa-sitemap text-purple-400"></i></div>
+                                <h5>JPA</h5>
+                                <p>Entity Mapping &amp; Persistence Layer.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Category 3: Version Control & Tools -->
+                <!-- Row 3 — Version Control & Tools (left) -->
                 <div>
-                    <h4 class="text-xl font-bold text-white mb-8 flex items-center gap-4">
+                    <h4 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
                             <i class="fab fa-git-alt text-sm text-orange-400"></i>
                         </div>
-                        Version Control & Tools
+                        Version Control &amp; Tools
                     </h4>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <!-- Git -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-orange-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-git-alt text-3xl text-orange-400"></i>
+                    <div class="marquee-wrapper">
+                        <div class="marquee-track">
+                            <!-- set A -->
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-orange-500/10"><i
+                                        class="fab fa-git-alt text-orange-400"></i></div>
+                                <h5>Git</h5>
+                                <p>Distributed VCS &amp; Branch Mgmt.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Git</h4>
-                            <p class="text-xs text-gray-400">Distributed Version Control & Branch Management.</p>
-                        </div>
-
-                        <!-- GitHub -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-gray-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-github text-3xl text-white"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-white/10"><i class="fab fa-github text-white"></i>
+                                </div>
+                                <h5>GitHub</h5>
+                                <p>PRs, Actions &amp; Repo Hosting.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">GitHub</h4>
-                            <p class="text-xs text-gray-400">Collaboration, PRs, Actions & Repository Hosting.</p>
-                        </div>
-
-                        <!-- Eclipse IDE -->
-                        <div
-                            class="glass p-6 rounded-2xl transition-all hover:-translate-y-2 duration-300 group border border-white/5 hover:border-purple-500/30 hover-glow">
-                            <div
-                                class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-code text-3xl text-purple-400"></i>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-purple-500/10"><i
+                                        class="fas fa-code text-purple-400"></i></div>
+                                <h5>Eclipse IDE</h5>
+                                <p>Debugging &amp; Maven Integration.</p>
                             </div>
-                            <h4 class="font-bold text-white mb-2">Eclipse IDE</h4>
-                            <p class="text-xs text-gray-400">Development, Debugging & Maven Integration.</p>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i class="fas fa-cube text-blue-400"></i>
+                                </div>
+                                <h5>Maven</h5>
+                                <p>Build Automation &amp; Dependency Mgmt.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-teal-500/10"><i
+                                        class="fas fa-terminal text-teal-400"></i></div>
+                                <h5>IntelliJ IDEA</h5>
+                                <p>Smart IDE &amp; Refactoring Tools.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-yellow-500/10"><i
+                                        class="fas fa-vial text-yellow-400"></i></div>
+                                <h5>Postman</h5>
+                                <p>API Testing &amp; Documentation.</p>
+                            </div>
+                            <!-- set B -->
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-orange-500/10"><i
+                                        class="fab fa-git-alt text-orange-400"></i></div>
+                                <h5>Git</h5>
+                                <p>Distributed VCS &amp; Branch Mgmt.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-white/10"><i class="fab fa-github text-white"></i>
+                                </div>
+                                <h5>GitHub</h5>
+                                <p>PRs, Actions &amp; Repo Hosting.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-purple-500/10"><i
+                                        class="fas fa-code text-purple-400"></i></div>
+                                <h5>Eclipse IDE</h5>
+                                <p>Debugging &amp; Maven Integration.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-blue-500/10"><i class="fas fa-cube text-blue-400"></i>
+                                </div>
+                                <h5>Maven</h5>
+                                <p>Build Automation &amp; Dependency Mgmt.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-teal-500/10"><i
+                                        class="fas fa-terminal text-teal-400"></i></div>
+                                <h5>IntelliJ IDEA</h5>
+                                <p>Smart IDE &amp; Refactoring Tools.</p>
+                            </div>
+                            <div class="marquee-card">
+                                <div class="marquee-icon-wrap bg-yellow-500/10"><i
+                                        class="fas fa-vial text-yellow-400"></i></div>
+                                <h5>Postman</h5>
+                                <p>API Testing &amp; Documentation.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-        </div>
         </div>
     </section>
 
@@ -888,7 +1443,7 @@
                             </div>
 
                             <h4 class="text-xl font-bold text-white mb-1">BCA Computer Application</h4>
-                            <h5 class="text-sm text-gray-400 mb-4 font-medium">KLE’S JT COLLEGE GADAG</h5>
+                            <h5 class="text-sm text-gray-400 mb-4 font-medium">KLEâ€™S JT COLLEGE GADAG</h5>
                             <p class="text-sm text-gray-400 leading-relaxed mb-2">
                                 CGPA: <span class="text-white font-bold">8.24</span>
                             </p>
@@ -1043,7 +1598,7 @@
                                         <p
                                             class="text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors">
                                             Developed and trained <span class="text-indigo-300">SVM & CNN</span> models
-                                            achieving an impressive <span class="text-white font-bold">88–90%
+                                            achieving an impressive <span class="text-white font-bold">88â€“90%
                                                 accuracy</span>.</p>
                                     </li>
                                     <li class="flex items-start gap-3 group/item">
@@ -1118,56 +1673,6 @@
                         </div>
                     </div>
                 </article>
-            </div>
-        </div>
-    </section>
-    <!-- Certificates Section -->
-    <section id="certificates" class="py-32 relative">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-xs font-bold uppercase tracking-widest text-purple-500 mb-3 reveal">Credentials</h2>
-            <h3 class="text-4xl md:text-5xl font-display font-bold mb-16 reveal stagger-1">Professional <span
-                    class="text-gradient">Certifications</span></h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal stagger-2">
-                <!-- Certificate 1 -->
-                <div class="group glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover-glow"
-                    data-cursor="hover">
-                    <div class="flex items-start justify-between mb-6">
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                            <i class="fas fa-certificate text-3xl text-purple-400"></i>
-                        </div>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">2026</span>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-2">Java Full Stack Training</h4>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Completed intensive training at **Qspiders
-                        Basavagudi**, mastering Core Java, JDBC, Spring Boot, Hibernate, and Data Structures And
-                        Algorithms.</p>
-                    <a href="#"
-                        class="inline-flex items-center gap-2 text-sm font-bold text-purple-400 hover:text-white transition-colors">
-                        Verify Credential <i class="fas fa-external-link-alt text-xs"></i>
-                    </a>
-                </div>
-
-                <!-- Certificate 2 -->
-                <div class="group glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover-glow"
-                    data-cursor="hover">
-                    <div class="flex items-start justify-between mb-6">
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                            <i class="fas fa-code text-3xl text-cyan-400"></i>
-                        </div>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">2024</span>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-2">Web Development (MERN Stack)</h4>
-                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">Conducted by **KLE JT COLLEGE GADAG**,
-                        focusing on building full-stack applications using **React.js, Node.js, and MongoDB**.</p>
-                    <a href="#"
-                        class="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-white transition-colors">
-                        Verify Credential <i class="fas fa-external-link-alt text-xs"></i>
-                    </a>
-                </div>
-
             </div>
         </div>
     </section>
@@ -1372,6 +1877,8 @@
             }
 
             // --- Typewriter Effect Removed ---
+
+
 
             // --- Mobile Menu ---
             const toggleMenu = () => {
